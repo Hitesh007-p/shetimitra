@@ -120,7 +120,7 @@ class _SeedsScreenState extends State<SeedsScreen> {
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        childAspectRatio: 0.75,
+        childAspectRatio: 0.70,
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {
@@ -143,7 +143,7 @@ class _SeedsScreenState extends State<SeedsScreen> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
             child: Image.asset(
               product["image"],
-              height: 100,
+              height: 130,
               width: double.infinity,
               fit: BoxFit.cover,
             ),
