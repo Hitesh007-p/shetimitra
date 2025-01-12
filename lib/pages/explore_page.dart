@@ -227,7 +227,9 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                   if (_selectedCrop != null) ...[
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 20),
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -240,12 +242,15 @@ class _ExplorePageState extends State<ExplorePage> {
                             ),
                           ),
                           SizedBox(height: 4),
-                          Text(
-                            _selectedCrop!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.brown[600],
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              _selectedCrop!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown[600],
+                              ),
                             ),
                           ),
                         ],
