@@ -1,6 +1,5 @@
 // ignore_for_file: unused_import, unused_field
 
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';

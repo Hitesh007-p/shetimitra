@@ -27,11 +27,9 @@ class _ExpenseManagementPageState extends State<ExpenseManagementPage> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-    if (pickedDate != null) {
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-    }
+    setState(() {
+      _selectedDate = pickedDate;
+    });
   }
 
   void _addExpense() {
