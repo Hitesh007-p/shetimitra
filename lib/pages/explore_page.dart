@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shetimitra/pages/post_creation.dart';
+import 'package:shetimitra/pages/post_creation_screen.dart';
 import 'package:shetimitra/pages/postercard.dart';
 import 'dart:io';
 import 'package:shetimitra/services/weather_service.dart';
