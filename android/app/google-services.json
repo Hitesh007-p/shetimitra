@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "632116358612",
+    "project_id": "shetimitra-9cefa",
+    "storage_bucket": "shetimitra-9cefa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632116358612:android:3adf40b7689b946ba37a41",
+        "android_client_info": {
+          "package_name": "com.example.shetimitra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNoWSU_wGgBliKq45byE-VXGepEzDPUvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
