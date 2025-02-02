@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:shetimitra/models/order.dart';
 import 'package:shetimitra/utils/extensions/date.dart';
 import 'package:shetimitra/widgets/order_item.dart';
