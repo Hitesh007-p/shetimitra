@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:shetimitra/data/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -13,9 +14,11 @@ class ServicesPage extends StatefulWidget {
   State<ServicesPage> createState() => _ServicesPageState();
 }
 
-class _ServicesPageState extends State<ServicesPage> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
+class _ServicesPageState extends State<ServicesPage>
+    with AutomaticKeepAliveClientMixin {
+  late PageController _adPageController;
+  int _currentAdPage = 0;
+  Timer? _carouselTimer;
   final List<Map<String, String>> ads = [
     {
       'image': 'assets/images/mordern_farm.jpg',
@@ -31,113 +34,48 @@ class _ServicesPageState extends State<ServicesPage> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (_currentPage < ads.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeIn,
-      );
+    _adPageController = PageController(viewportFraction: 0.9);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startAutoCarousel();
+    });
+  }
+
+  void _startAutoCarousel() {
+    _carouselTimer?.cancel();
+    _carouselTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!mounted || !_adPageController.hasClients) return;
+
+      final nextPage = _currentAdPage < ads.length - 1 ? _currentAdPage + 1 : 0;
+
+      _adPageController
+          .animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      )
+          .then((_) {
+        if (mounted) setState(() => _currentAdPage = nextPage);
+      });
     });
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _carouselTimer?.cancel();
+    _adPageController.dispose();
     super.dispose();
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Column(
         children: [
-          // Advertisement Banner
-          SizedBox(
-            height: 250,
-            child: Stack(
-              children: [
-                PageView.builder(
-                  controller: _pageController,
-                  itemCount: ads.length,
-                  onPageChanged: (int page) {
-                    setState(() {
-                      _currentPage = page;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: AssetImage(ads[index]['image']!),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.7),
-                              Colors.transparent,
-                            ],
-                          ),
-                        ),
-                        alignment: Alignment.bottomLeft,
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          ads[index]['title']!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(ads.length, (index) {
-                      return Container(
-                        width: 8,
-                        height: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentPage == index
-                              ? Colors.white
-                              : Colors.white54,
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
+          _buildAdCarousel(),
           // Services Grid
           Expanded(
             child: GridView.builder(
@@ -224,6 +162,90 @@ class _ServicesPageState extends State<ServicesPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAdCarousel() {
+    return Visibility(
+      visible: ads.isNotEmpty,
+      child: SizedBox(
+        height: 250,
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _adPageController,
+              itemCount: ads.length,
+              onPageChanged: (page) {
+                if (mounted) setState(() => _currentAdPage = page);
+              },
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                      image: AssetImage(ads[index]['image']!),
+                      fit: BoxFit.cover,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    alignment: Alignment.bottomLeft,
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      ads[index]['title']!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(ads.length, (index) {
+                  return Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentAdPage == index
+                          ? Colors.white
+                          : Colors.white54,
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
