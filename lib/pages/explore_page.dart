@@ -20,7 +20,8 @@ class ExplorePage extends StatefulWidget {
   _ExplorePageState createState() => _ExplorePageState();
 }
 
-class _ExplorePageState extends State<ExplorePage> {
+class _ExplorePageState extends State<ExplorePage>
+    with AutomaticKeepAliveClientMixin {
   late Future<Map<String, dynamic>> _weatherData;
   final WeatherService _weatherService = WeatherService();
   bool _isLoading = true;
@@ -64,8 +65,9 @@ class _ExplorePageState extends State<ExplorePage> {
     'वांगे': 'assets/crops/vange.png',
   };
 
-  final PageController _adPageController = PageController();
+  late PageController _adPageController;
   int _currentAdPage = 0;
+  Timer? _carouselTimer;
   final List<Map<String, String>> _ads = [
     {
       'image': 'assets/images/fertilizer.jpg',
@@ -89,6 +91,7 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   void initState() {
     super.initState();
+    _adPageController = PageController();
     if (!_isWeatherLoaded) {
       _fetchWeather();
     }
@@ -152,25 +155,35 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   void _startAdCarousel() {
-    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (_currentAdPage < _ads.length - 1) {
-        _currentAdPage++;
-      } else {
-        _currentAdPage = 0;
+    _carouselTimer?.cancel();
+    _carouselTimer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (!mounted) return;
+
+      final newPage = _currentAdPage < _ads.length - 1 ? _currentAdPage + 1 : 0;
+
+      if (_adPageController.hasClients) {
+        _adPageController
+            .animateToPage(
+          newPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        )
+            .then((_) {
+          if (mounted) setState(() => _currentAdPage = newPage);
+        });
       }
-      _adPageController.animateToPage(
-        _currentAdPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
     });
   }
 
   @override
   void dispose() {
+    _carouselTimer?.cancel();
     _adPageController.dispose();
     super.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
