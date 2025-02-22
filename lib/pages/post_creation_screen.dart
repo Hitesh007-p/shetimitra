@@ -74,7 +74,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Color.fromRGBO(158, 158, 158, 0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -105,7 +105,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withOpacity(0.7),
+                              Color.fromRGBO(0, 0, 0, 0.5),
                               Colors.transparent,
                             ],
                           ),
@@ -128,7 +128,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                             Text(
                               _bannerData[index]['subtitle'],
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Color.fromRGBO(255, 255, 255, 0.8),
                                 fontSize: 14,
                               ),
                             ),
@@ -223,7 +223,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
+                          color: Color.fromRGBO(189, 189, 189, 0.5),
                           blurRadius: 10,
                           offset: const Offset(0, 3),
                         ),
@@ -234,7 +234,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                       decoration: InputDecoration(
                         hintText: 'तुमची समस्या तपशीलवार लिहा...',
                         hintStyle: TextStyle(
-                          color: Colors.grey.shade500,
+                          color: Color.fromRGBO(158, 158, 158, 0.5),
                           fontSize: 14,
                         ),
                         border: OutlineInputBorder(
@@ -246,7 +246,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                         contentPadding: const EdgeInsets.all(16),
                       ),
                       style: TextStyle(
-                        color: Colors.grey.shade800,
+                        color: Color.fromRGBO(158, 158, 158, 0.5),
                         fontSize: 14,
                       ),
                       onChanged: (value) => _problemDescription = value,
@@ -294,7 +294,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
       decoration: BoxDecoration(
         color: currentBannerIndex == index
             ? Colors.green.shade700
-            : Colors.grey.shade400,
+            : Color.fromRGBO(158, 158, 158, 0.5),
         borderRadius: BorderRadius.circular(4),
       ),
     );

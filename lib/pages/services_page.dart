@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:shetimitra/data/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
