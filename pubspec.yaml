@@ -15,7 +15,7 @@ dependencies:
   badges: ^3.1.1
   timelines: ^0.1.0
   easy_stepper: ^0.7.3
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.2.1
   geolocator: ^9.0.0
   connectivity_plus: ^6.1.0
   flutter_local_notifications: ^18.0.0
@@ -52,6 +52,7 @@ flutter:
     - assets/
     - assets/crops/
     - assets/services/
+    - assets/images/
     - shorebird.yaml
 
   

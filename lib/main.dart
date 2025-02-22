@@ -16,7 +16,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
-        textTheme: GoogleFonts.nunitoTextTheme(),
+        textTheme: GoogleFonts.muktaTextTheme(),
       ),
       home: const OnboardingPage(),
     );

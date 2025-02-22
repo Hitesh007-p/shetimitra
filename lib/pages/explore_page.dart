@@ -11,6 +11,7 @@ import 'package:shetimitra/services/webview.dart';
 import 'package:shetimitra/widgets/insuranceoption.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -63,22 +64,25 @@ class _ExplorePageState extends State<ExplorePage> {
     'वांगे': 'assets/crops/vange.png',
   };
 
-  final List<Map<String, dynamic>> posterData = [
+  final PageController _adPageController = PageController();
+  int _currentAdPage = 0;
+  final List<Map<String, String>> _ads = [
     {
-      'image': 'https://via.placeholder.com/400x200?text=Poster+1',
-      'showAdvice': true,
+      'image': 'assets/images/fertilizer.jpg',
+      'title': 'सर्वोत्तम खते',
+      'subtitle': 'सवलतीच्या किमतीत!'
     },
     {
-      'image': 'https://via.placeholder.com/400x200?text=Poster+2',
-      'showAdvice': false,
+      'image': 'assets/images/droan.jpg',
+      'title': 'द्रोण भाडे',
+      'subtitle': 'प्रती एकर ६०० रुपये'
     },
     {
-      'image': 'https://via.placeholder.com/400x200?text=Poster+3',
-      'showAdvice': false,
+      'image': 'assets/images/irrigation_ad.jpg',
+      'title': 'सिंचन प्रणाली',
+      'subtitle': '३०% सूटसह'
     },
   ];
-
-  int currentPage = 0;
 
   bool _isWeatherLoaded = false;
 
@@ -88,6 +92,7 @@ class _ExplorePageState extends State<ExplorePage> {
     if (!_isWeatherLoaded) {
       _fetchWeather();
     }
+    _startAdCarousel();
   }
 
   void _fetchWeather() async {
@@ -146,6 +151,27 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  void _startAdCarousel() {
+    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (_currentAdPage < _ads.length - 1) {
+        _currentAdPage++;
+      } else {
+        _currentAdPage = 0;
+      }
+      _adPageController.animateToPage(
+        _currentAdPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _adPageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,9 +201,7 @@ class _ExplorePageState extends State<ExplorePage> {
             )
           else if (weatherInfo != null)
             _buildWeatherWidget(),
-          SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Card(
             elevation: 5,
             color: const Color.fromARGB(255, 252, 252, 252),
@@ -265,45 +289,9 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: 300,
-            child: Column(
-              children: [
-                Expanded(
-                  child: PageView.builder(
-                    itemCount: posterData.length, // Number of posters
-                    itemBuilder: (context, index) {
-                      // For the first poster, show the Free Advice section
-                      bool showAdvice = posterData[index]['showAdvice'];
-
-                      return PosterCard(
-                        image: posterData[index]['image'],
-                        showAdvice: showAdvice,
-                      );
-                    },
-                    onPageChanged: (index) {
-                      // Optional: handle page change for indicator updates
-                    },
-                  ),
-                ),
-                SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      posterData.length,
-                      (index) => buildIndicator(index),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 20),
+          _buildAdCarousel(),
+          const SizedBox(height: 20),
           Card(
             color: Colors.orange.shade50,
             shape:
@@ -375,16 +363,105 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  Widget buildIndicator(int index) {
-    bool isActive = currentPage == index;
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 4.0),
-      width: isActive ? 12.0 : 8.0,
-      height: 8.0,
-      decoration: BoxDecoration(
-        color: isActive ? Colors.blue : Colors.grey,
-        borderRadius: BorderRadius.circular(4.0),
+  Widget _buildAdCarousel() {
+    return SizedBox(
+      height: 200,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _adPageController,
+            itemCount: _ads.length,
+            onPageChanged: (int page) {
+              setState(() {
+                _currentAdPage = page;
+              });
+            },
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        _ads[index]['image']!,
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black.withOpacity(0.7),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _ads[index]['title']!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              _ads[index]['subtitle']!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 10,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(_ads.length, (index) {
+                return Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        _currentAdPage == index ? Colors.white : Colors.white54,
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
       ),
     );
   }
