@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shetimitra/pages/aihelthscanner.dart';
+import 'package:shetimitra/pages/land_measurement.dart';
 import 'package:shetimitra/pages/post_creation_screen.dart';
 import 'package:shetimitra/pages/postercard.dart';
 import 'dart:io';
@@ -301,6 +303,57 @@ class _ExplorePageState extends State<ExplorePage>
                 ],
               ),
             ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LandMeasurementPage()),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/shovel.jpg',
+                      width: 70,
+                      height: 50,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "तुमची शेतजमीन ची मोजणी करा",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Aihelthscanner()),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/tractor.jpg',
+                      width: 70,
+                      height: 50,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "AI आरोग्य स्कॅनर",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
           _buildAdCarousel(),
