@@ -1,5 +1,4 @@
-import 'package:shetimitra/pages/home_page.dart';
-import 'package:shetimitra/pages/registration.dart';
+import 'package:shetimitra/pages/otpscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -119,7 +118,7 @@ class _MyLoginState extends State<MyLogin> {
               ),
               SizedBox(height: 50),
               Text(
-                'तुमच्या खात्यात प्रवेश करा',
+                'आपला फोन नंबर प्रवेश करा',
                 style: TextStyle(fontSize: 17),
                 textAlign: TextAlign.center,
               ),
@@ -152,7 +151,7 @@ class _MyLoginState extends State<MyLogin> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: ' फोन नंबर',
+                          hintText: 'फोन नंबर',
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -163,47 +162,6 @@ class _MyLoginState extends State<MyLogin> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.green),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextField(
-                      controller: passwordController,
-                      obscureText: _isObscured,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: ' पासवर्ड',
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isObscured
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _isObscured = !_isObscured;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text('पासवर्ड विसरलात?'),
-                ),
-              ),
               SizedBox(height: 15),
               SizedBox(
                 height: 60,
@@ -211,36 +169,15 @@ class _MyLoginState extends State<MyLogin> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                        builder: (context) => const HomePage()));
+                        builder: (context) => const OTPScreen()));
                   },
                   child: Text(
-                    'प्रवेश करा',
+                    'OTP मिळवा',
                     style: TextStyle(color: const Color.fromARGB(255, 6, 5, 5)),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
-                ),
-              ),
-              SizedBox(height: 60),
-              Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "खाते नाही ?",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                            CupertinoPageRoute(
-                                builder: (context) => const MyRegistration()));
-                      },
-                      child: Text('नोंदणी करा'),
-                    ),
-                  ],
                 ),
               ),
             ],
