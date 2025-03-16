@@ -5,6 +5,8 @@ class Aihelthscanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(child: Text("लवकरच आपल्या सेवेत हजर करू ")),
+    );
   }
 }
