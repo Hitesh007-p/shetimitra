@@ -17,7 +17,6 @@ class _MyLoginState extends State<MyLogin> {
   TextEditingController countrycode = TextEditingController();
   TextEditingController cnumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool _isObscured = true;
 
   @override
   void initState() {
