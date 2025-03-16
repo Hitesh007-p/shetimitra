@@ -304,57 +304,10 @@ class _ExplorePageState extends State<ExplorePage>
               ),
             ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LandMeasurementPage()),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/shovel.jpg',
-                      width: 70,
-                      height: 50,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "तुमची शेतजमीन ची मोजणी करा",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Aihelthscanner()),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/tractor.jpg',
-                      width: 70,
-                      height: 50,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "AI आरोग्य स्कॅनर",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          SizedBox(
+            height: 20,
           ),
+          _buildCombinedFeatureCard(context),
           const SizedBox(height: 20),
           _buildAdCarousel(),
           const SizedBox(height: 20),
@@ -831,6 +784,123 @@ class _ExplorePageState extends State<ExplorePage>
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCombinedFeatureCard(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        // height: 225,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.green[50]!,
+              Colors.white,
+              Colors.green[50]!,
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.agriculture, color: Colors.green[800], size: 24),
+                  const SizedBox(width: 8),
+                  Text(
+                    "शेतकरी साधने",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.green[900],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildToolItem(
+                    context,
+                    image: 'assets/shovel.jpg',
+                    label: "अंतरिक्ष मार्फत जमीन मोजणी",
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LandMeasurementPage()),
+                    ),
+                  ),
+                  _buildToolItem(
+                    context,
+                    image: 'assets/helthscan.jpg',
+                    label: "AI पीक आरोग्य सूचक ",
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PlantDiseaseDetector()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToolItem(BuildContext context,
+      {required String image,
+      required String label,
+      required VoidCallback onTap}) {
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  image,
+                  width: 120,
+                  height: 60,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.green[900],
+                  height: 1.2,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Icon(
+                Icons.touch_app_outlined,
+                size: 20,
+                color: Colors.green[600],
+              ),
+            ],
+          ),
         ),
       ),
     );
