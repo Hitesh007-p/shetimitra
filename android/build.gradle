@@ -2,7 +2,12 @@ buildscript {
     ext.kotlin_version = '1.9.22'
     repositories {
         google()
-        mavenCentral()
+    // Primary Maven Central
+    mavenCentral()
+    // Explicit mirror/fallback in case repo.maven.apache.org is unreachable
+    maven { url 'https://repo1.maven.org/maven2' }
+    // Optional mirror for users in regions with restricted access
+    maven { url 'https://maven.aliyun.com/repository/public' }
     }
 
     dependencies {
@@ -15,7 +20,9 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral()
+    mavenCentral()
+    maven { url 'https://repo1.maven.org/maven2' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
     }
 }
 

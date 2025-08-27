@@ -44,7 +44,7 @@ class OrderDetailsPage extends StatelessWidget {
                 customStep: CircleAvatar(
                   radius: 8,
                   backgroundColor: activeStep > index
-                      ? theme.colorScheme.primary.withOpacity(0.5)
+                      ? theme.colorScheme.primary.withAlpha((0.5 * 255).round())
                       : Colors.grey.shade400,
                   child: CircleAvatar(
                     radius: 2.5,
@@ -84,8 +84,8 @@ class OrderDetailsPage extends StatelessWidget {
                       Chip(
                         shape: const StadiumBorder(),
                         side: BorderSide.none,
-                        backgroundColor:
-                            theme.colorScheme.primaryContainer.withOpacity(0.4),
+                        backgroundColor: theme.colorScheme.primaryContainer
+                            .withAlpha((0.4 * 255).round()),
                         labelPadding: EdgeInsets.zero,
                         avatar: const Icon(Icons.fire_truck),
                         padding: const EdgeInsets.symmetric(

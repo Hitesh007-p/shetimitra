@@ -118,7 +118,7 @@ class _ServicesPageState extends State<ServicesPage>
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                                 colors: [
-                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withAlpha((0.6 * 255).round()),
                                   Colors.transparent,
                                 ],
                               ),
@@ -136,7 +136,8 @@ class _ServicesPageState extends State<ServicesPage>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8, horizontal: 12),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white
+                                        .withAlpha((0.2 * 255).round()),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -189,7 +190,7 @@ class _ServicesPageState extends State<ServicesPage>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withAlpha((0.5 * 255).round()),
                         spreadRadius: 2,
                         blurRadius: 5,
                         offset: const Offset(0, 3),
@@ -203,7 +204,7 @@ class _ServicesPageState extends State<ServicesPage>
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.7),
+                          Colors.black.withAlpha((0.7 * 255).round()),
                           Colors.transparent,
                         ],
                       ),

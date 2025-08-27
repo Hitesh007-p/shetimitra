@@ -242,7 +242,8 @@ $symptomsInfo
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.green.withOpacity(0.1),
+                              color:
+                                  Colors.green.withAlpha((0.1 * 255).round()),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -258,7 +259,8 @@ $symptomsInfo
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.green.withOpacity(0.1),
+                                    color: Colors.green
+                                        .withAlpha((0.1 * 255).round()),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -337,7 +339,7 @@ $symptomsInfo
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withAlpha((0.05 * 255).round()),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -375,8 +377,8 @@ $symptomsInfo
                                           shape: BoxShape.circle,
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  Colors.black.withOpacity(0.1),
+                                              color: Colors.black.withAlpha(
+                                                  (0.1 * 255).round()),
                                               blurRadius: 4,
                                             ),
                                           ],
@@ -453,7 +455,7 @@ $symptomsInfo
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withAlpha((0.05 * 255).round()),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -486,7 +488,7 @@ $symptomsInfo
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withAlpha((0.05 * 255).round()),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),

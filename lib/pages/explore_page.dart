@@ -189,6 +189,8 @@ class _ExplorePageState extends State<ExplorePage>
 
   @override
   Widget build(BuildContext context) {
+    // Ensure AutomaticKeepAliveClientMixin behaviour is preserved
+    super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -402,7 +404,7 @@ class _ExplorePageState extends State<ExplorePage>
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
+                      color: Colors.grey.withAlpha((0.3 * 255).round()),
                       spreadRadius: 2,
                       blurRadius: 8,
                       offset: const Offset(0, 4),
@@ -424,7 +426,7 @@ class _ExplorePageState extends State<ExplorePage>
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withOpacity(0.7),
+                              Colors.black.withAlpha((0.7 * 255).round()),
                               Colors.transparent,
                             ],
                           ),
@@ -507,7 +509,7 @@ class _ExplorePageState extends State<ExplorePage>
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.green.shade200.withOpacity(0.5),
+              color: Colors.green.shade200.withAlpha((0.5 * 255).round()),
               spreadRadius: 2,
               blurRadius: 8,
               offset: Offset(0, 4),

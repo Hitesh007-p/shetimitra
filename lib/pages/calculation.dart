@@ -122,7 +122,7 @@ class _CalculationState extends State<Calculation>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withAlpha((0.5 * 255).round()),
                         spreadRadius: 2,
                         blurRadius: 5,
                         offset: const Offset(0, 3),
@@ -136,7 +136,7 @@ class _CalculationState extends State<Calculation>
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.7),
+                          Colors.black.withAlpha((0.7 * 255).round()),
                           Colors.transparent,
                         ],
                       ),
@@ -233,7 +233,7 @@ class _CalculationState extends State<Calculation>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.withOpacity(0.3),
+            color: Colors.green.withAlpha((0.3 * 255).round()),
             spreadRadius: 2,
             blurRadius: 8,
             offset: const Offset(0, 3),

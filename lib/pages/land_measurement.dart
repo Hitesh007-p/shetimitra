@@ -114,7 +114,7 @@ class LandMeasurementPageState extends State<LandMeasurementPage> {
         points: _polygonPoints,
         strokeWidth: 2,
         strokeColor: Colors.blue,
-        fillColor: Colors.blue.withOpacity(0.3),
+        fillColor: Colors.blue.withAlpha((0.3 * 255).round()),
       ));
     }
   }
