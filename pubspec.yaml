@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_iconly: ^1.0.2
-  google_fonts: ^5.1.0
+  google_fonts: 8.0.0
   badges: ^3.1.1
   timelines: ^0.1.0
   easy_stepper: ^0.7.3
