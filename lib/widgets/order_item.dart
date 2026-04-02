@@ -1,6 +1,7 @@
-import 'package:shetimitra/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/models/order.dart';
 
 import 'order_product.dart';
 
@@ -16,6 +17,8 @@ class OrderItem extends StatelessWidget {
     final totalPrice = order.products
         .fold(0.0, (previousValue, element) => previousValue + element.price);
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -31,60 +34,54 @@ class OrderItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Order: ${order.id}",
+                  l10n.format('orderPrefix', {'id': order.id}),
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const Spacer(),
                 Text(
-                  "(${order.products.length} Items)",
+                  l10n.format('itemsCount', {'count': '${order.products.length}'}),
                   style: theme.textTheme.bodySmall,
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  "\$${totalPrice.toStringAsFixed(2)}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  l10n.price(totalPrice),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             const SizedBox(height: 20),
-            ...List.generate(products.length, (index) {
-              final product = products[index];
-              return OrderProduct(order: order, product: product);
-            }),
+            ...products.map((product) => OrderProduct(order: order, product: product)),
             if (order.products.length > 1) const SizedBox(height: 10),
             if (order.products.length > 1)
               Center(
-                  child: TextButton.icon(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    showDragHandle: true,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.surface,
-                        ),
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(14),
-                          itemCount: order.products.length,
-                          itemBuilder: (context, index) {
-                            final product = order.products[index];
-                            return OrderProduct(order: order, product: product);
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-                icon: const Icon(IconlyBold.arrowRight),
-                label: const Text("View all"),
-              ))
+                child: TextButton.icon(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      showDragHandle: true,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return Container(
+                          decoration: BoxDecoration(color: theme.colorScheme.surface),
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.all(14),
+                            itemCount: order.products.length,
+                            itemBuilder: (context, index) {
+                              final product = order.products[index];
+                              return OrderProduct(order: order, product: product);
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(IconlyBold.arrowRight),
+                  label: Text(l10n.t('viewAll')),
+                ),
+              ),
           ],
         ),
       ),

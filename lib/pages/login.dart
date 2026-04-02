@@ -1,10 +1,9 @@
-import 'package:shetimitra/pages/otpscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/pages/otpscreen.dart';
+import 'package:shetimitra/widgets/language_menu_button.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({super.key});
@@ -14,88 +13,19 @@ class MyLogin extends StatefulWidget {
 }
 
 class _MyLoginState extends State<MyLogin> {
-  TextEditingController countrycode = TextEditingController();
-  TextEditingController cnumberController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    countrycode.text = '+91';
-    super.initState();
-    // _checkLoginStatus();
-  }
-
-  // Future<void> _checkLoginStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
-  //   if (isLoggedIn) {
-  //     Navigator.pushReplacementNamed(context, 'home_page');
-  //   }
-  // }
-
-  // Future<void> loginUser() async {
-  //   String cnumber = cnumberController.text;
-  //   String password = passwordController.text;
-
-  //   var url = Uri.parse('https://vegetable.mrnetwork.in/api/login');
-
-  //   if (cnumber.isEmpty || password.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Please enter both phone number and password")),
-  //     );
-  //     return;
-  //   }
-
-  //   try {
-  //     var response = await http.post(
-  //       url,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: jsonEncode({
-  //         'cnumber': cnumber,
-  //         'password': password,
-  //       }),
-  //     );
-
-  //     print(response.body);
-  //     if (response.statusCode == 200) {
-  //       var responseData = jsonDecode(response.body);
-
-  //       if (responseData['message'] == 'Login successful') {
-  //         SharedPreferences prefs = await SharedPreferences.getInstance();
-  //         await prefs.setBool('isLoggedIn', true);
-
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text("Login successful!")),
-  //         );
-
-  //         Navigator.pushReplacementNamed(context, 'home');
-  //       } else {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text("Login failed: ${responseData['message']}")),
-  //         );
-  //       }
-  //     } else {
-  //       var errorData = jsonDecode(response.body);
-  //       String errorMessage = errorData['message'] ?? 'Login failed';
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("Error: $errorMessage")),
-  //       );
-  //     }
-  //   } catch (error) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Failed to log in: $error")),
-  //     );
-  //   }
-  // }
+  final TextEditingController countrycode = TextEditingController(text: '+91');
+  final TextEditingController cnumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        actions: const [LanguageMenuButton()],
+      ),
       body: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
+        margin: const EdgeInsets.symmetric(horizontal: 25),
         alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
@@ -107,21 +37,25 @@ class _MyLoginState extends State<MyLogin> {
                 height: 340,
               ),
               Text(
-                'आधुनिक शेतीसाठी आधुनिक साथीदार!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'तुमच्या शेतासाठी सर्वोत्तम माहिती आणि साधने',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 50),
-              Text(
-                'आपला फोन नंबर प्रवेश करा',
-                style: TextStyle(fontSize: 17),
+                l10n.t('loginHeadline'),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
+              Text(
+                l10n.t('loginSubheadline'),
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 50),
+              Text(
+                l10n.t('enterPhonePrompt'),
+                style: const TextStyle(fontSize: 17),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
               Container(
                 height: 55,
                 decoration: BoxDecoration(
@@ -130,27 +64,27 @@ class _MyLoginState extends State<MyLogin> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     SizedBox(
-                      width: 35,
+                      width: 40,
                       child: TextField(
                         controller: countrycode,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Text('|',
+                    const SizedBox(width: 10),
+                    const Text('|',
                         style: TextStyle(fontSize: 33, color: Colors.green)),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Expanded(
                       child: TextField(
                         controller: cnumberController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'फोन नंबर',
+                          hintText: l10n.t('phoneHint'),
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -161,21 +95,23 @@ class _MyLoginState extends State<MyLogin> {
                   ],
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               SizedBox(
                 height: 60,
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                        builder: (context) => const OTPScreen()));
+                    Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(
+                          builder: (context) => const OTPScreen()),
+                    );
                   },
-                  child: Text(
-                    'OTP मिळवा',
-                    style: TextStyle(color: const Color.fromARGB(255, 6, 5, 5)),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
+                  ),
+                  child: Text(
+                    l10n.t('getOtp'),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
               ),

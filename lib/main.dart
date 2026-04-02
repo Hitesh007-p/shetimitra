@@ -1,24 +1,55 @@
-import 'package:shetimitra/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/pages/onboarding_page.dart';
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final AppLocaleController _localeController = AppLocaleController();
+
+  @override
+  void initState() {
+    super.initState();
+    _localeController.load();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-        textTheme: GoogleFonts.muktaTextTheme(),
+    return AppLocaleScope(
+      controller: _localeController,
+      child: AnimatedBuilder(
+        animation: _localeController,
+        builder: (context, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            locale: _localeController.locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            theme: ThemeData(
+              useMaterial3: true,
+              textTheme: GoogleFonts.muktaTextTheme(),
+            ),
+            onGenerateTitle: (context) => AppLocalizations.of(context).t('appName'),
+            home: const OnboardingPage(),
+          );
+        },
       ),
-      home: const OnboardingPage(),
     );
   }
 }

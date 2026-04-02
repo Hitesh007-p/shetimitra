@@ -1,0 +1,606 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class AppLocaleController extends ChangeNotifier {
+  static const _storageKey = 'app_locale';
+
+  Locale? _locale;
+
+  Locale? get locale => _locale;
+
+  Future<void> load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString(_storageKey);
+    if (languageCode != null && languageCode.isNotEmpty) {
+      _locale = Locale(languageCode);
+      notifyListeners();
+    }
+  }
+
+  Future<void> setLocale(Locale locale) async {
+    _locale = locale;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_storageKey, locale.languageCode);
+  }
+}
+
+class AppLocaleScope extends InheritedNotifier<AppLocaleController> {
+  const AppLocaleScope({
+    super.key,
+    required AppLocaleController controller,
+    required super.child,
+  }) : super(notifier: controller);
+
+  static AppLocaleController of(BuildContext context) {
+    final scope = context.dependOnInheritedWidgetOfExactType<AppLocaleScope>();
+    assert(scope != null, 'AppLocaleScope not found in context');
+    return scope!.notifier!;
+  }
+}
+
+class AppLocalizations {
+  AppLocalizations(this.locale);
+
+  final Locale locale;
+
+  static const supportedLocales = [
+    Locale('en'),
+    Locale('hi'),
+    Locale('mr'),
+  ];
+
+  static const delegate = _AppLocalizationsDelegate();
+
+  static AppLocalizations of(BuildContext context) {
+    final localizations =
+        Localizations.of<AppLocalizations>(context, AppLocalizations);
+    assert(localizations != null, 'AppLocalizations not found in context');
+    return localizations!;
+  }
+
+  static final Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      'appName': 'ShetiMitra',
+      'language': 'Language',
+      'english': 'English',
+      'hindi': 'Hindi',
+      'marathi': 'Marathi',
+      'selectLanguage': 'Select Your Language',
+      'languageChangeNote':
+          'Language changes will be applied immediately across the app',
+      'welcomeTitle': 'Welcome to ShetiMitra',
+      'onboardingDescription':
+          'Get farming products, guidance, and services from one place with just a few taps.',
+      'startWithLogin': 'Start with login',
+      'loginHeadline': 'A modern companion for modern farming!',
+      'loginSubheadline': 'Useful information and tools for your farm.',
+      'enterPhonePrompt': 'Enter your phone number',
+      'phoneHint': 'Phone number',
+      'getOtp': 'Get OTP',
+      'otpPrompt': 'Enter the OTP sent to your phone number',
+      'verifyOtp': 'Verify OTP',
+      'resendOtp': 'Resend OTP',
+      'greeting': 'Hello Hitesh',
+      'servicesSubtitle': 'Explore our farming services',
+      'tabExplore': 'Community',
+      'tabServices': 'Services',
+      'tabPlanning': 'Planning',
+      'tabProfile': 'Profile',
+      'weather': 'Weather',
+      'temperature': 'Temperature',
+      'feelsLike': 'Feels like',
+      'humidity': 'Humidity',
+      'wind': 'Wind',
+      'visibility': 'Visibility',
+      'pressure': 'Pressure',
+      'chooseCrop': 'Choose your crop',
+      'selectedCropLabel': 'Selected crop',
+      'farmingServices': 'Farming services',
+      'farmerTools': 'Farmer tools',
+      'landMeasurementTool': 'Satellite land measurement',
+      'aiHealthTool': 'AI crop health scanner',
+      'cropInsurance': 'Crop insurance',
+      'mahaDbt': 'MahaDBT',
+      'download712': 'Download 7/12',
+      'like': 'Like',
+      'comment': 'Comment',
+      'communityPosts': 'Farmer posts',
+      'bestFertilizers': 'Best fertilizers',
+      'bestFertilizersSubtitle': 'At affordable prices!',
+      'droneRental': 'Drone rental',
+      'droneRentalSubtitle': 'Just Rs. 600 per acre',
+      'irrigationSystems': 'Irrigation systems',
+      'irrigationSystemsSubtitle': 'With 30% savings',
+      'modernFarmingTechniques': 'Modern Farming Techniques',
+      'organicSolutions': 'Organic Solutions',
+      'cropManagement': 'Crop Management',
+      'newPostTitle': 'Create new post',
+      'cropProtectionTips': 'Crop protection tips',
+      'weatherAlerts': 'Weather alerts',
+      'expertSupport': 'Expert support',
+      'problemHelpTitle': 'Share your crop problem',
+      'uploadPhoto': 'Upload photo',
+      'problemDescription': 'Problem description',
+      'problemHint': 'Describe your problem in detail...',
+      'submitPost': 'Submit post',
+      'fillPhotoAndProblem': 'Please add both a photo and problem description.',
+      'chooseSeason': 'Choose season',
+      'kharif': 'Kharif',
+      'rabi': 'Rabi',
+      'pleaseSelectCropAndSeason': 'Please select both crop and season.',
+      'next': 'Next',
+      'expenseManagement': 'Expense management',
+      'totalExpense': 'Total expense',
+      'taskName': 'Work item',
+      'amountSpent': 'Expense amount',
+      'pickDate': 'Choose date',
+      'datePrefix': 'Date',
+      'addExpense': 'Add expense',
+      'expenseList': 'Expense list',
+      'update': 'Update',
+      'cart': 'Cart',
+      'totalItems': 'Total ({count} items)',
+      'proceedToCheckout': 'Proceed to checkout',
+      'removeFromCart': 'Remove from cart?',
+      'keep': 'Keep',
+      'details': 'Details',
+      'availableInStock': 'Available in stock',
+      'description': 'Description',
+      'similarProducts': 'Similar products',
+      'readMore': 'Read more',
+      'readLess': 'Read less',
+      'addToCart': 'Add to cart',
+      'myOrders': 'My orders',
+      'orderDetails': 'Order details',
+      'orderPrefix': 'Order: {id}',
+      'itemsCount': '({count} items)',
+      'viewAll': 'View all',
+      'paymentMethod': 'Payment method',
+      'deliveryEstimate': 'Delivery estimate',
+      'processing': 'Processing',
+      'picking': 'Picking',
+      'shipping': 'Shipping',
+      'delivered': 'Delivered',
+      'quantity': 'Qty: {count}',
+      'aboutUs': 'About us',
+      'updateProfile': 'Update profile',
+      'logout': 'Logout',
+      'serviceSeeds': 'Seeds',
+      'serviceNursery': 'Nursery',
+      'serviceMachinery': 'Machinery',
+      'serviceDroneSpraying': 'Drone spraying',
+      'serviceSoilTesting': 'Soil testing',
+      'serviceCropMedicine': 'Crop medicine',
+      'shopForFarmTitle': 'Shop today for your farm',
+      'allProducts': 'All products',
+      'buyNow': 'Buy now',
+      'cropWheat': 'Wheat',
+      'cropChickpea': 'Chickpea',
+      'cropMaize': 'Maize',
+      'cropTomato': 'Tomato',
+      'cropBanana': 'Banana',
+      'cropSugarcane': 'Sugarcane',
+      'cropCotton': 'Cotton',
+      'cropPapaya': 'Papaya',
+      'cropWatermelon': 'Watermelon',
+      'cropPaddy': 'Paddy',
+      'cropSoybean': 'Soybean',
+      'cropChili': 'Chilli',
+      'cropEggplant': 'Eggplant',
+      'categoryBottleGourd': 'Bottle gourd',
+      'categoryOnion': 'Onion',
+      'categoryGreenChilli': 'Green chilli',
+      'seedProductOne': 'UPL GS-10 seeds (1 kg)',
+      'seedProductTwo': 'Agrostar bonus muskmelon (50 g)',
+      'discountSuffix': 'off',
+      'productTractorName': 'Tractor',
+      'productTractorDescription':
+          'A strong tractor for efficient and reliable farm work.',
+      'productSeedsName': 'Premium seeds',
+      'productSeedsDescription':
+          'High-quality seeds for healthy growth and better yield.',
+      'productSoilTestingName': 'Soil testing',
+      'productSoilTestingDescription':
+          'A soil testing service to help plan nutrients with confidence.',
+      'productCattleFeedName': 'Cattle feed',
+      'productCattleFeedDescription':
+          'Balanced nutrition that supports cattle growth and milk production.',
+      'unitDay': 'day(s)',
+      'unitKg': 'kg',
+      'unit712': '7/12 record',
+      'landMeasurementTitle': 'Land measurement',
+      'profileName': 'Hitesh Patil',
+      'profileEmail': 'hiteshpatil@gmail.com',
+      'orderedItems': 'Ordered items',
+      'postLocation': 'Dondaicha, Maharashtra',
+      'weatherUnavailable': 'Weather information is unavailable right now.',
+      'location': 'Location',
+      'freeAdvice': 'Free advice',
+      'freeAdviceDesc':
+          'If your crop has any issue, get free guidance from our agriculture experts.',
+      'callNow': 'Call now',
+    },
+    'hi': {
+      'appName': 'शेतिमित्र',
+      'language': 'भाषा',
+      'english': 'अंग्रेज़ी',
+      'hindi': 'हिंदी',
+      'marathi': 'मराठी',
+      'selectLanguage': 'भाषा चुनें',
+      'languageChangeNote': 'भाषा बदलने के लिए कृपया ऐप को पुनः प्रारंभ करें',
+      'welcomeTitle': 'शेतिमित्र में आपका स्वागत है',
+      'onboardingDescription':
+          'खेती के लिए, विशेषज्ञों से सलाह और सेवाएं पाएं, और अपनी फसल को बेहतर बनाएं।',
+      'startWithLogin': 'लॉगिन से शुरू करें',
+      'loginHeadline': 'अपने मोबाइल नंबर से लॉगिन करें!',
+      'loginSubheadline': 'कृपया अपना मोबाइल नंबर दर्ज करें',
+      'enterPhonePrompt': 'अपना मोबाइल नंबर दर्ज करें',
+      'phoneHint': 'मोबाइल नंबर',
+      'getOtp': 'OTP प्राप्त करें',
+      'otpPrompt': 'कृपया OTP दर्ज करें जो आपके नंबर पर भेजा गया है',
+      'verifyOtp': 'OTP सत्यापित करें',
+      'resendOtp': 'OTP पुनः भेजें',
+      'greeting': 'नमस्ते किसान',
+      'servicesSubtitle': 'हमारी सेवाएं देखें',
+      'tabExplore': 'खोजें',
+      'tabServices': 'सेवाएं',
+      'tabPlanning': 'योजना',
+      'tabProfile': 'प्रोफ़ाइल',
+      'weather': 'मौसम',
+      'temperature': 'तापमान',
+      'feelsLike': 'अनुभूत तापमान',
+      'humidity': 'नमी',
+      'wind': 'हवा',
+      'visibility': 'दृश्यता',
+      'pressure': 'दबाव',
+      'chooseCrop': 'फसल चुनें',
+      'selectedCropLabel': 'चयनित फसल',
+      'farmingServices': 'कृषि सेवाएं',
+      'farmerTools': 'किसान उपकरण',
+      'landMeasurementTool': 'भूमि माप उपकरण',
+      'aiHealthTool': 'AI फसल स्वास्थ्य',
+      'cropInsurance': 'फसल बीमा',
+      'mahaDbt': 'महाDBT',
+      'download712': '7/12 डाउनलोड करें',
+      'like': 'पसंद',
+      'comment': 'टिप्पणी',
+      'communityPosts': 'समुदाय पोस्ट',
+      'bestFertilizers': 'सर्वश्रेष्ठ उर्वरक',
+      'bestFertilizersSubtitle': 'बेहतर फसल के लिए!',
+      'droneRental': 'ड्रोन किराया',
+      'droneRentalSubtitle': '₹600 से शुरू',
+      'irrigationSystems': 'सिंचाई प्रणाली',
+      'irrigationSystemsSubtitle': '30% तक छूट',
+      'modernFarmingTechniques': 'आधुनिक खेती तकनीक',
+      'organicSolutions': 'जैविक समाधान',
+      'cropManagement': 'फसल प्रबंधन',
+      'newPostTitle': 'नई पोस्ट जोड़ें',
+      'cropProtectionTips': 'फसल सुरक्षा टिप्स',
+      'weatherAlerts': 'मौसम अलर्ट',
+      'expertSupport': 'विशेषज्ञ सहायता',
+      'problemHelpTitle': 'फसल समस्या में मदद चाहिए?',
+      'uploadPhoto': 'फोटो अपलोड करें',
+      'problemDescription': 'समस्या का विवरण',
+      'problemHint': 'अपनी समस्या का विवरण लिखें...',
+      'submitPost': 'पोस्ट सबमिट करें',
+      'fillPhotoAndProblem': 'कृपया फोटो और समस्या विवरण भरें',
+      'chooseSeason': 'मौसम चुनें',
+      'kharif': 'खरीफ',
+      'rabi': 'रबी',
+      'pleaseSelectCropAndSeason': 'कृपया फसल और मौसम चुनें',
+      'next': 'आगे',
+      'expenseManagement': 'खर्च प्रबंधन',
+      'totalExpense': 'कुल खर्च',
+      'taskName': 'कार्य का नाम',
+      'amountSpent': 'खर्च राशि',
+      'pickDate': 'तारीख चुनें',
+      'datePrefix': 'तारीख:',
+      'addExpense': 'खर्च जोड़ें',
+      'expenseList': 'खर्च सूची',
+      'update': 'अपडेट करें',
+      'cart': 'कार्ट',
+      'totalItems': 'कुल ({count} आइटम)',
+      'proceedToCheckout': 'चेकआउट करें',
+      'removeFromCart': 'कार्ट से हटाएं',
+      'keep': 'रखें',
+      'details': 'विवरण',
+      'availableInStock': 'स्टॉक में उपलब्ध',
+      'description': 'विवरण',
+      'similarProducts': 'समान उत्पाद',
+      'readMore': 'और पढ़ें',
+      'readLess': 'कम पढ़ें',
+      'addToCart': 'कार्ट में डालें',
+      'myOrders': 'मेरे ऑर्डर',
+      'orderDetails': 'ऑर्डर विवरण',
+      'orderPrefix': 'ऑर्डर: {id}',
+      'itemsCount': '({count} आइटम)',
+      'viewAll': 'सभी देखें',
+      'paymentMethod': 'भुगतान विधि',
+      'deliveryEstimate': 'डिलीवरी अनुमान',
+      'processing': 'प्रोसेसिंग',
+      'picking': 'चयन',
+      'shipping': 'शिपिंग',
+      'delivered': 'डिलीवर',
+      'quantity': 'मात्रा: {count}',
+      'aboutUs': 'हमारे बारे में',
+      'updateProfile': 'प्रोफ़ाइल अपडेट करें',
+      'logout': 'लॉगआउट',
+      'serviceSeeds': 'बीज',
+      'serviceNursery': 'नर्सरी',
+      'serviceMachinery': 'मशीनरी',
+      'serviceDroneSpraying': 'ड्रोन छिड़काव',
+      'serviceSoilTesting': 'मिट्टी परीक्षण',
+      'serviceCropMedicine': 'फसल दवा',
+      'shopForFarmTitle': 'अपने खेत के लिए खरीदारी करें',
+      'allProducts': 'सभी उत्पाद',
+      'buyNow': 'अभी खरीदें',
+      'cropWheat': 'गेहूं',
+      'cropChickpea': 'चना',
+      'cropMaize': 'मक्का',
+      'cropTomato': 'टमाटर',
+      'cropBanana': 'केला',
+      'cropSugarcane': 'गन्ना',
+      'cropCotton': 'कपास',
+      'cropPapaya': 'पपीता',
+      'cropWatermelon': 'तरबूज',
+      'cropPaddy': 'धान',
+      'cropSoybean': 'सोयाबीन',
+      'cropChili': 'मिर्च',
+      'cropEggplant': 'बैंगन',
+      'categoryBottleGourd': 'लौकी',
+      'categoryOnion': 'प्याज',
+      'categoryGreenChilli': 'हरी मिर्च',
+      'seedProductOne': 'UPL GS-10 बीज (1 किग्रा)',
+      'seedProductTwo': 'एग्रोस्टार बोनस खरबूजा (50 ग्राम)',
+      'discountSuffix': 'छूट',
+      'productTractorName': 'ट्रैक्टर',
+      'productTractorDescription':
+          'कृषि कार्य के लिए मजबूत और विश्वसनीय ट्रैक्टर।',
+      'productSeedsName': 'प्रीमियम बीज',
+      'productSeedsDescription':
+          'स्वस्थ वृद्धि और बेहतर उपज के लिए उच्च गुणवत्ता वाले बीज।',
+      'productSoilTestingName': 'मिट्टी परीक्षण',
+      'productSoilTestingDescription':
+          'पोषक तत्वों की योजना के लिए मिट्टी परीक्षण सेवा।',
+      'productCattleFeedName': 'पशु आहार',
+      'productCattleFeedDescription':
+          'पशुओं की वृद्धि और दूध उत्पादन के लिए संतुलित पोषण।',
+      'unitDay': 'दिन',
+      'unitKg': 'किग्रा',
+      'unit712': '7/12 रिकॉर्ड',
+      'landMeasurementTitle': 'भूमि माप',
+      'profileName': 'हितेश पाटिल',
+      'profileEmail': 'hiteshpatil@gmail.com',
+      'orderedItems': 'आदेशित वस्तुएं',
+      'postLocation': 'डोंडाइचा, महाराष्ट्र',
+      'weatherUnavailable': 'मौसम जानकारी अभी उपलब्ध नहीं है।',
+      'location': 'स्थान',
+      'freeAdvice': 'मुफ्त सलाह',
+      'freeAdviceDesc':
+          'अगर आपकी फसल में कोई समस्या है, तो हमारे कृषि विशेषज्ञों से मुफ्त मार्गदर्शन प्राप्त करें।',
+      'callNow': 'अभी कॉल करें',
+    },
+    'mr': {
+      'appName': 'शेतिमित्र',
+      'language': 'भाषा',
+      'english': 'इंग्रजी',
+      'hindi': 'हिंदी',
+      'marathi': 'मराठी',
+      'selectLanguage': 'भाषा निवडा',
+      'languageChangeNote': 'भाषा बदलण्यासाठी कृपया अ‍ॅप पुन्हा सुरू करा',
+      'welcomeTitle': 'शेतिमित्रमध्ये आपले स्वागत आहे',
+      'onboardingDescription':
+          'शेतीसाठी, तज्ज्ञ सल्ला व सेवा मिळवा आणि आपली पिके सुधारवा.',
+      'startWithLogin': 'लॉगिनने सुरू करा',
+      'loginHeadline': 'आपला मोबाईल नंबर वापरून लॉगिन करा!',
+      'loginSubheadline': 'कृपया आपला मोबाईल नंबर प्रविष्ट करा',
+      'enterPhonePrompt': 'आपला मोबाईल नंबर प्रविष्ट करा',
+      'phoneHint': 'मोबाईल नंबर',
+      'getOtp': 'OTP मिळवा',
+      'otpPrompt': 'आपल्या नंबरवर पाठवलेला OTP प्रविष्ट करा',
+      'verifyOtp': 'OTP सत्यापित करा',
+      'resendOtp': 'OTP पुन्हा पाठवा',
+      'greeting': 'नमस्कार शेतकरी',
+      'servicesSubtitle': 'आमच्या सेवा पहा',
+      'tabExplore': 'अन्वेषण',
+      'tabServices': 'सेवा',
+      'tabPlanning': 'योजना',
+      'tabProfile': 'प्रोफाइल',
+      'weather': 'हवामान',
+      'temperature': 'तापमान',
+      'feelsLike': 'अनुभव तापमान',
+      'humidity': 'आर्द्रता',
+      'wind': 'वारा',
+      'visibility': 'दृश्यता',
+      'pressure': 'दाब',
+      'chooseCrop': 'पिक निवडा',
+      'selectedCropLabel': 'निवडलेले पीक',
+      'farmingServices': 'शेती सेवा',
+      'farmerTools': 'शेतकरी साधने',
+      'landMeasurementTool': 'जमीन मोजणी साधन',
+      'aiHealthTool': 'AI पीक आरोग्य',
+      'cropInsurance': 'पीक विमा',
+      'mahaDbt': 'महाDBT',
+      'download712': 'तुमचा 7/12 बघा',
+      'like': 'आवडले',
+      'comment': 'टिप्पणी',
+      'communityPosts': 'समुदाय पोस्ट',
+      'bestFertilizers': 'सर्वोत्तम खत',
+      'bestFertilizersSubtitle': 'उत्तम पिकासाठी!',
+      'droneRental': 'ड्रोन भाड्याने',
+      'droneRentalSubtitle': '₹600 पासून सुरू',
+      'irrigationSystems': 'सिंचन प्रणाली',
+      'irrigationSystemsSubtitle': '३०% पर्यंत सूट',
+      'modernFarmingTechniques': 'आधुनिक शेती तंत्र',
+      'organicSolutions': 'सेंद्रिय उपाय',
+      'cropManagement': 'पीक व्यवस्थापन',
+      'newPostTitle': 'नवीन पोस्ट जोडा',
+      'cropProtectionTips': 'पीक संरक्षण टिप्स',
+      'weatherAlerts': 'हवामान सूचना',
+      'expertSupport': 'तज्ज्ञ मदत',
+      'problemHelpTitle': 'पिकाच्या समस्येसाठी मदतीची गरज आहे?',
+      'uploadPhoto': 'फोटो अपलोड करा',
+      'problemDescription': 'समस्येचे वर्णन',
+      'problemHint': 'आपली समस्या लिहा...',
+      'submitPost': 'पोस्ट सबमिट करा',
+      'fillPhotoAndProblem': 'कृपया फोटो व समस्या तपशील भरा',
+      'chooseSeason': 'हंगाम निवडा',
+      'kharif': 'खरीप',
+      'rabi': 'रबी',
+      'pleaseSelectCropAndSeason': 'कृपया पीक व हंगाम निवडा',
+      'next': 'पुढे',
+      'expenseManagement': 'खर्च व्यवस्थापन',
+      'totalExpense': 'एकूण खर्च',
+      'taskName': 'कार्याचे नाव',
+      'amountSpent': 'खर्च रक्कम',
+      'pickDate': 'तारीख निवडा',
+      'datePrefix': 'तारीख:',
+      'addExpense': 'खर्च जोडा',
+      'expenseList': 'खर्च यादी',
+      'update': 'अपडेट करा',
+      'cart': 'कार्ट',
+      'totalItems': 'एकूण ({count} वस्तू)',
+      'proceedToCheckout': 'चेकआउट करा',
+      'removeFromCart': 'कार्टमधून काढा',
+      'keep': 'ठेवा',
+      'details': 'तपशील',
+      'availableInStock': 'साठ्यात उपलब्ध',
+      'description': 'वर्णन',
+      'similarProducts': 'समान उत्पादने',
+      'readMore': 'अधिक वाचा',
+      'readLess': 'कमी वाचा',
+      'addToCart': 'कार्टमध्ये जोडा',
+      'myOrders': 'माझी ऑर्डर्स',
+      'orderDetails': 'ऑर्डर तपशील',
+      'orderPrefix': 'ऑर्डर: {id}',
+      'itemsCount': '({count} वस्तू)',
+      'viewAll': 'सर्व पहा',
+      'paymentMethod': 'पेमेंट पद्धत',
+      'deliveryEstimate': 'डिलीवरी अंदाज',
+      'processing': 'प्रक्रिया',
+      'picking': 'निवड',
+      'shipping': 'शिपिंग',
+      'delivered': 'डिलीवर',
+      'quantity': 'प्रमाण: {count}',
+      'aboutUs': 'आमच्याबद्दल',
+      'updateProfile': 'प्रोफाइल अपडेट करा',
+      'logout': 'लॉगआउट',
+      'serviceSeeds': 'बियाणे',
+      'serviceNursery': 'नर्सरी',
+      'serviceMachinery': 'यंत्रसामग्री',
+      'serviceDroneSpraying': 'ड्रोन फवारणी',
+      'serviceSoilTesting': 'माती तपासणी',
+      'serviceCropMedicine': 'पीक औषध',
+      'shopForFarmTitle': 'आपल्या शेतासाठी खरेदी करा',
+      'allProducts': 'सर्व उत्पादने',
+      'buyNow': 'आता खरेदी करा',
+      'cropWheat': 'गहू',
+      'cropChickpea': 'हरभरा',
+      'cropMaize': 'मका',
+      'cropTomato': 'टोमॅटो',
+      'cropBanana': 'केळी',
+      'cropSugarcane': 'ऊस',
+      'cropCotton': 'कापूस',
+      'cropPapaya': 'पपई',
+      'cropWatermelon': 'कलिंगड',
+      'cropPaddy': 'तांदूळ',
+      'cropSoybean': 'सोयाबीन',
+      'cropChili': 'मिरची',
+      'cropEggplant': 'वांगी',
+      'categoryBottleGourd': 'दुधी भोपळा',
+      'categoryOnion': 'कांदा',
+      'categoryGreenChilli': 'हिरवी मिरची',
+      'seedProductOne': 'UPL GS-10 बियाणे (1 कि.ग्रा.)',
+      'seedProductTwo': 'एग्रोस्टार बोनस खरबूज (50 ग्रॅम)',
+      'discountSuffix': 'सूट',
+      'productTractorName': 'ट्रॅक्टर',
+      'productTractorDescription':
+          'A strong tractor for efficient and reliable farm work.',
+      'productSeedsName': 'Premium seeds',
+      'productSeedsDescription':
+          'High-quality seeds for healthy growth and better yield.',
+      'productSoilTestingName': 'Soil testing',
+      'productSoilTestingDescription':
+          'A soil testing service to help plan nutrients with confidence.',
+      'productCattleFeedName': 'Cattle feed',
+      'productCattleFeedDescription':
+          'Balanced nutrition that supports cattle growth and milk production.',
+      'unitDay': 'दिवस',
+      'unitKg': 'कि.ग्रा.',
+      'unit712': '7/12 नोंद',
+      'landMeasurementTitle': 'जमीन मोजणी',
+      'profileName': 'हितेश पाटील',
+      'profileEmail': 'hiteshpatil@gmail.com',
+      'orderedItems': 'ऑर्डर केलेल्या वस्तू',
+      'postLocation': 'डोंडाईचा, महाराष्ट्र',
+      'weatherUnavailable': 'हवामानाची माहिती सध्या उपलब्ध नाही.',
+      'location': 'स्थान',
+      'freeAdvice': 'मोफत सल्ला',
+      'freeAdviceDesc':
+          'If your crop has any issue, get free guidance from our agriculture experts.',
+      'callNow': 'आता कॉल करा',
+    },
+  };
+
+  String get _languageCode => _localizedValues.containsKey(locale.languageCode)
+      ? locale.languageCode
+      : 'en';
+
+  String t(String key) {
+    return _localizedValues[_languageCode]?[key] ??
+        _localizedValues['en']?[key] ??
+        key;
+  }
+
+  String format(String key, Map<String, String> values) {
+    var text = t(key);
+    for (final entry in values.entries) {
+      text = text.replaceAll('{${entry.key}}', entry.value);
+    }
+    return text;
+  }
+
+  String languageName(String languageCode) {
+    switch (languageCode) {
+      case 'hi':
+        return t('hindi');
+      case 'mr':
+        return t('marathi');
+      default:
+        return t('english');
+    }
+  }
+
+  String price(num value) => '?${value.toStringAsFixed(2)}';
+
+  String productName(String key) => t(key);
+
+  String productDescription(String key) => t(key);
+
+  String unitName(String key) => t(key);
+
+  String cropName(String key) => t(key);
+
+  String serviceName(String key) => t(key);
+}
+
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => ['en', 'hi', 'mr'].contains(
+        locale.languageCode,
+      );
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
+  }
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}

@@ -5,33 +5,33 @@ import '../models/service.dart';
 
 List<Service> services = [
   Service(
-    name: "बियाणे",
-    image: "assets/services/seeds.jpg",
-    destination: SeedsScreen(),
+    name: 'serviceSeeds',
+    image: 'assets/services/seeds.jpg',
+    destination: const SeedsScreen(),
   ),
   const Service(
-    name: "Nursary",
-    image: "assets/services/seedlings.jpg",
+    name: 'serviceNursery',
+    image: 'assets/services/seedlings.jpg',
     destination: NursaryScreen(),
   ),
   const Service(
-    name: "मशीनरी",
-    image: "assets/services/machinery.jpg",
+    name: 'serviceMachinery',
+    image: 'assets/services/machinery.jpg',
     destination: NursaryScreen(),
   ),
   const Service(
-    name: "द्रोण फावरणी",
-    image: "assets/services/droan.jpeg",
+    name: 'serviceDroneSpraying',
+    image: 'assets/services/droan.jpeg',
     destination: NursaryScreen(),
   ),
   const Service(
-    name: "माती परीक्षण",
-    image: "assets/services/soil.jpeg",
+    name: 'serviceSoilTesting',
+    image: 'assets/services/soil.jpeg',
     destination: NursaryScreen(),
   ),
   const Service(
-    name: "फवारणी औषध",
-    image: "assets/services/crop_disease.jpg",
+    name: 'serviceCropMedicine',
+    image: 'assets/services/crop_disease.jpg',
     destination: NursaryScreen(),
   ),
 ];

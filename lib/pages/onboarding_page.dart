@@ -1,14 +1,21 @@
-import 'package:shetimitra/pages/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/pages/login.dart';
+import 'package:shetimitra/widgets/language_menu_button.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        actions: const [LanguageMenuButton()],
+      ),
       body: SafeArea(
         minimum: const EdgeInsets.all(20),
         child: Center(
@@ -21,26 +28,28 @@ class OnboardingPage extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'शेतीमित्रा मध्ये आपले स्वागत आहे',
+                l10n.t('welcomeTitle'),
+                textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
                     ?.copyWith(fontWeight: FontWeight.bold, fontSize: 26),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 30, bottom: 30),
+              Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 30),
                 child: Text(
-                  "तुमची कृषी उत्पादने किंवा सेवा तुमच्या घरच्या आरामात मिळवा. तुम्ही तुमच्या आवडत्या उत्पादनांपासून किंवा सेवांपासून फक्त काही क्लिक दूर आहात.",
+                  l10n.t('onboardingDescription'),
                   textAlign: TextAlign.center,
                 ),
               ),
               FilledButton.tonalIcon(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                      builder: (context) => const MyLogin()));
+                  Navigator.of(context).pushReplacement(
+                    CupertinoPageRoute(builder: (context) => const MyLogin()),
+                  );
                 },
                 icon: const Icon(IconlyLight.login),
-                label: const Text("लॉगिन सह सुरू ठेवा"),
+                label: Text(l10n.t('startWithLogin')),
               )
             ],
           ),

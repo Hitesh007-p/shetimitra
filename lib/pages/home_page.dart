@@ -1,11 +1,13 @@
+import 'package:badges/badges.dart' as badges;
+import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
 import 'package:shetimitra/pages/calculation.dart';
 import 'package:shetimitra/pages/cart_page.dart';
 import 'package:shetimitra/pages/explore_page.dart';
 import 'package:shetimitra/pages/profile_page.dart';
 import 'package:shetimitra/pages/services_page.dart';
-import 'package:badges/badges.dart' as badges;
-import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:shetimitra/widgets/language_menu_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,18 +17,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final pages = [
+  final List<Widget> _pages = [
     const ExplorePage(),
     const ServicesPage(),
     const Calculation(),
     const ProfilePage(),
-    const CartPage()
   ];
+
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: const Drawer(),
@@ -42,16 +46,17 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "नमस्कार हितेश 👋🏾",
+              l10n.t('greeting'),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
-              "आमच्या सेवांचा आनंद घ्या",
+              l10n.t('servicesSubtitle'),
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
         actions: [
+          const LanguageMenuButton(),
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton.filledTonal(
@@ -101,40 +106,37 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: pages[currentPageIndex],
-      bottomNavigationBar: Container(
-        height: 90,
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: currentPageIndex,
-          onTap: (index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(IconlyLight.home),
-              label: "कृषि चर्चा",
-              activeIcon: Icon(IconlyBold.home),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(IconlyLight.call),
-              label: "कृषी दुकान",
-              activeIcon: Icon(IconlyBold.call),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(IconlyLight.calendar),
-              label: "पिकाची तपशील",
-              activeIcon: Icon(IconlyBold.chat),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(IconlyLight.profile),
-              label: "प्रोफाइल",
-              activeIcon: Icon(IconlyBold.profile),
-            ),
-          ],
-        ),
+      body: _pages[currentPageIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentPageIndex,
+        onTap: (index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(IconlyLight.home),
+            label: l10n.t('tabExplore'),
+            activeIcon: const Icon(IconlyBold.home),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(IconlyLight.call),
+            label: l10n.t('tabServices'),
+            activeIcon: const Icon(IconlyBold.call),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(IconlyLight.calendar),
+            label: l10n.t('tabPlanning'),
+            activeIcon: const Icon(IconlyBold.chat),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(IconlyLight.profile),
+            label: l10n.t('tabProfile'),
+            activeIcon: const Icon(IconlyBold.profile),
+          ),
+        ],
       ),
     );
   }

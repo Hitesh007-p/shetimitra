@@ -1,28 +1,31 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:shetimitra/models/order.dart';
-import 'package:shetimitra/utils/extensions/date.dart';
-import 'package:shetimitra/widgets/order_item.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:intl/intl.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/models/order.dart';
+import 'package:shetimitra/widgets/order_item.dart';
 
 class OrderDetailsPage extends StatelessWidget {
-  const OrderDetailsPage({
-    Key? key,
-    required this.order,
-  }) : super(key: key);
+  const OrderDetailsPage({super.key, required this.order});
 
   final Order order;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final orderTimelines = ['Processing', 'Picking', 'Shipping', 'Delivered'];
-    int activeStep = 2;
+    final l10n = AppLocalizations.of(context);
+    final orderTimelines = [
+      l10n.t('processing'),
+      l10n.t('picking'),
+      l10n.t('shipping'),
+      l10n.t('delivered'),
+    ];
+    const activeStep = 2;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Order Details"),
+        title: Text(l10n.t('orderDetails')),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -76,7 +79,7 @@ class OrderDetailsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Order: ${order.id}",
+                        l10n.format('orderPrefix', {'id': order.id}),
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -88,11 +91,8 @@ class OrderDetailsPage extends StatelessWidget {
                             .withAlpha((0.4 * 255).round()),
                         labelPadding: EdgeInsets.zero,
                         avatar: const Icon(Icons.fire_truck),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
-                        label: Text(
-                          orderTimelines[activeStep],
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        label: Text(orderTimelines[activeStep]),
                       ),
                     ],
                   ),
@@ -100,52 +100,42 @@ class OrderDetailsPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Delivery estimate"),
+                      Text(l10n.t('deliveryEstimate')),
                       Text(
-                        order.date.deliveryDate,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
+                        DateFormat.yMMMd(Localizations.localeOf(context).languageCode)
+                            .format(order.date),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 15),
                   Text(
-                    "Jessi Williams",
-                    style: theme.textTheme.titleSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                    l10n.t('profileName'),
+                    style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
-                  const Row(
+                  Row(
                     children: [
-                      Icon(IconlyLight.home, size: 15),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          "6844 Hall Spring Suite 134\n East Annabury, OK 42291",
-                        ),
-                      ),
+                      const Icon(IconlyLight.home, size: 15),
+                      const SizedBox(width: 5),
+                      Expanded(child: Text(l10n.t('postLocation'))),
                     ],
                   ),
                   const SizedBox(height: 5),
-                  const Row(
+                  Row(
                     children: [
-                      Icon(IconlyLight.call, size: 15),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          "233 5447 51048",
-                        ),
-                      ),
+                      const Icon(IconlyLight.call, size: 15),
+                      const SizedBox(width: 5),
+                      const Expanded(child: Text('233 5447 51048')),
                     ],
                   ),
                   const SizedBox(height: 25),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Payment method"),
-                      Text(
-                        "Credit Card **1234",
+                      Text(l10n.t('paymentMethod')),
+                      const Text(
+                        'Credit Card **1234',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

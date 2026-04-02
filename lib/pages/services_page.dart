@@ -1,10 +1,9 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:shetimitra/data/services.dart';
 import 'package:flutter/material.dart';
+import 'package:shetimitra/data/services.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
 
 class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
@@ -18,16 +17,11 @@ class _ServicesPageState extends State<ServicesPage>
   late PageController _adPageController;
   int _currentAdPage = 0;
   Timer? _carouselTimer;
+
   final List<Map<String, String>> ads = [
-    {
-      'image': 'assets/images/mordern_farm.jpg',
-      'title': 'Modern Farming Techniques'
-    },
-    {
-      'image': 'assets/images/organic_solution.jpg',
-      'title': 'Organic Solutions'
-    },
-    {'image': 'assets/images/crop_managment.jpg', 'title': 'Crop Management'},
+    {'image': 'assets/images/mordern_farm.jpg', 'title': 'modernFarmingTechniques'},
+    {'image': 'assets/images/organic_solution.jpg', 'title': 'organicSolutions'},
+    {'image': 'assets/images/crop_managment.jpg', 'title': 'cropManagement'},
   ];
 
   @override
@@ -46,14 +40,14 @@ class _ServicesPageState extends State<ServicesPage>
 
       final nextPage = _currentAdPage < ads.length - 1 ? _currentAdPage + 1 : 0;
 
-      _adPageController
-          .animateToPage(
+      _adPageController.animateToPage(
         nextPage,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
-      )
-          .then((_) {
-        if (mounted) setState(() => _currentAdPage = nextPage);
+      );
+
+      setState(() {
+        _currentAdPage = nextPage;
       });
     });
   }
@@ -71,11 +65,12 @@ class _ServicesPageState extends State<ServicesPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       body: Column(
         children: [
-          _buildAdCarousel(),
-          // Services Grid
+          _buildAdCarousel(l10n),
           Expanded(
             child: GridView.builder(
               shrinkWrap: true,
@@ -89,6 +84,7 @@ class _ServicesPageState extends State<ServicesPage>
                 mainAxisSpacing: 14,
               ),
               itemBuilder: (context, index) {
+                final service = services[index];
                 return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -99,7 +95,7 @@ class _ServicesPageState extends State<ServicesPage>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => services[index].destination,
+                          builder: (context) => service.destination,
                         ),
                       );
                     },
@@ -109,7 +105,7 @@ class _ServicesPageState extends State<ServicesPage>
                         fit: StackFit.expand,
                         children: [
                           Image.asset(
-                            services[index].image,
+                            service.image,
                             fit: BoxFit.cover,
                           ),
                           Container(
@@ -134,14 +130,15 @@ class _ServicesPageState extends State<ServicesPage>
                                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 12),
+                                    vertical: 8,
+                                    horizontal: 12,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white
-                                        .withAlpha((0.2 * 255).round()),
+                                    color: Colors.white.withAlpha((0.2 * 255).round()),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
-                                    services[index].name,
+                                    l10n.serviceName(service.name),
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
@@ -166,86 +163,75 @@ class _ServicesPageState extends State<ServicesPage>
     );
   }
 
-  Widget _buildAdCarousel() {
-    return Visibility(
-      visible: ads.isNotEmpty,
-      child: SizedBox(
-        height: 250,
-        child: Stack(
-          children: [
-            PageView.builder(
-              controller: _adPageController,
-              itemCount: ads.length,
-              onPageChanged: (page) {
-                if (mounted) setState(() => _currentAdPage = page);
-              },
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.all(8),
+  Widget _buildAdCarousel(AppLocalizations l10n) {
+    return SizedBox(
+      height: 250,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _adPageController,
+            itemCount: ads.length,
+            onPageChanged: (page) {
+              if (mounted) {
+                setState(() => _currentAdPage = page);
+              }
+            },
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    image: AssetImage(ads[index]['image']!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: AssetImage(ads[index]['image']!),
-                      fit: BoxFit.cover,
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black.withAlpha((0.7 * 255).round()),
+                        Colors.transparent,
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withAlpha((0.5 * 255).round()),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black.withAlpha((0.7 * 255).round()),
-                          Colors.transparent,
-                        ],
-                      ),
+                  alignment: Alignment.bottomLeft,
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    l10n.t(ads[index]['title']!),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    alignment: Alignment.bottomLeft,
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      ads[index]['title']!,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(ads.length, (index) {
+                return Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _currentAdPage == index ? Colors.white : Colors.white54,
                   ),
                 );
-              },
+              }),
             ),
-            Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(ads.length, (index) {
-                  return Container(
-                    width: 8,
-                    height: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _currentAdPage == index
-                          ? Colors.white
-                          : Colors.white54,
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

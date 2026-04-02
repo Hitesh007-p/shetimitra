@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:shetimitra/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/models/product.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({super.key, required this.cartItem});
@@ -12,6 +13,8 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -34,15 +37,13 @@ class CartItem extends StatelessWidget {
           SnackBar(
             duration: const Duration(seconds: 3),
             action: SnackBarAction(
-              label: "Keep",
+              label: l10n.t('keep'),
               onPressed: () {
                 completer.complete(false);
                 ScaffoldMessenger.of(context).removeCurrentSnackBar();
               },
             ),
-            content: const Text(
-              "Remove from cart?",
-            ),
+            content: Text(l10n.t('removeFromCart')),
           ),
         );
         Timer(const Duration(seconds: 3), () {
@@ -52,7 +53,7 @@ class CartItem extends StatelessWidget {
           }
         });
 
-        return await completer.future;
+        return completer.future;
       },
       child: SizedBox(
         height: 125,
@@ -83,11 +84,13 @@ class CartItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(cartItem.name,
-                          style: Theme.of(context).textTheme.titleMedium),
+                      Text(
+                        l10n.productName(cartItem.name),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       const SizedBox(height: 2),
                       Text(
-                        cartItem.description,
+                        l10n.productDescription(cartItem.description),
                         style: Theme.of(context).textTheme.bodySmall,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -97,11 +100,8 @@ class CartItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "\$${cartItem.price}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
+                            l10n.price(cartItem.price),
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                           ),
@@ -113,38 +113,21 @@ class CartItem extends StatelessWidget {
                                 minHeight: 30,
                                 minWidth: 30,
                               ),
-                              selectedColor:
-                                  Theme.of(context).colorScheme.primary,
-                              isSelected: const [
-                                true,
-                                false,
-                                true,
-                              ],
+                              selectedColor: Theme.of(context).colorScheme.primary,
+                              isSelected: const [true, false, true],
                               children: [
-                                const Icon(
-                                  Icons.remove,
-                                  size: 20,
-                                ),
-                                Text("${Random().nextInt(5) + 1}"),
-                                const Icon(
-                                  Icons.add,
-                                  size: 20,
-                                ),
+                                const Icon(Icons.remove, size: 20),
+                                Text('${Random().nextInt(5) + 1}'),
+                                const Icon(Icons.add, size: 20),
                               ],
-                              onPressed: (int index) {
-                                if (index == 0) {
-                                  // decrease quantity
-                                } else if (index == 2) {
-                                  // increase quantity
-                                }
-                              },
+                              onPressed: (int index) {},
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

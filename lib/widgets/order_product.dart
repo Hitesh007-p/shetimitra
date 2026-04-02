@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import '../models/order.dart';
-import '../models/product.dart';
-import '../pages/order_details_page.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
+import 'package:shetimitra/models/order.dart';
+import 'package:shetimitra/models/product.dart';
+import 'package:shetimitra/pages/order_details_page.dart';
 
 class OrderProduct extends StatelessWidget {
   const OrderProduct({
@@ -19,6 +19,9 @@ class OrderProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final qty = Random().nextInt(4) + 1;
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -46,12 +49,11 @@ class OrderProduct extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product.name,
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  l10n.productName(product.name),
+                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  product.description,
+                  l10n.productDescription(product.description),
                   style: Theme.of(context).textTheme.bodySmall,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -61,18 +63,18 @@ class OrderProduct extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "\$${product.price}",
+                      l10n.price(product.price),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    Text("Qty: ${Random().nextInt(4) + 1}")
+                    Text(l10n.format('quantity', {'count': '$qty'})),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

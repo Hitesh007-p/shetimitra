@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shetimitra/l10n/app_localizations.dart';
 import 'package:shetimitra/pages/home_page.dart';
+import 'package:shetimitra/widgets/language_menu_button.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -10,13 +12,18 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends State<OTPScreen> {
-  TextEditingController otpController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        actions: const [LanguageMenuButton()],
+      ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25),
+        margin: const EdgeInsets.symmetric(horizontal: 25),
         alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
@@ -28,50 +35,68 @@ class _OTPScreenState extends State<OTPScreen> {
                 height: 340,
               ),
               Text(
-                'आधुनिक शेतीसाठी आधुनिक साथीदार!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'तुमच्या शेतासाठी सर्वोत्तम माहिती आणि साधने',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 50),
-              Text(
-                'कृपया आपल्या फोन नंबरवर पाठवलेला OTP प्रविष्ट करा',
-                style: TextStyle(fontSize: 17),
+                l10n.t('loginHeadline'),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 30),
-              _buildOTPField(),
-              SizedBox(height: 20),
+              const SizedBox(height: 8),
+              Text(
+                l10n.t('loginSubheadline'),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 50),
+              Text(
+                l10n.t('otpPrompt'),
+                style: const TextStyle(fontSize: 17),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              Container(
+                height: 55,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.green),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: TextField(
+                    controller: otpController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    maxLength: 6,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                      counterText: '',
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               SizedBox(
                 height: 60,
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(CupertinoPageRoute(
-                        builder: (context) => const HomePage()));
+                    Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(builder: (context) => const HomePage()),
+                    );
                   },
-                  child: Text(
-                    'OTP सत्यापित करा',
-                    style: TextStyle(
-                        color: const Color.fromARGB(255, 6, 5, 5),
-                        fontSize: 16),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
+                  child: Text(
+                    l10n.t('verifyOtp'),
+                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextButton(
-                onPressed: () {
-                  // OTP पुनर्प्राप्त करा क्रिया
-                },
+                onPressed: () {},
                 child: Text(
-                  'OTP पुनर्प्राप्त करा',
-                  style: TextStyle(color: Colors.green, fontSize: 16),
+                  l10n.t('resendOtp'),
+                  style: const TextStyle(color: Colors.green, fontSize: 16),
                 ),
               ),
             ],
@@ -80,42 +105,4 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
-
-  Widget _buildOTPField() {
-    return Container(
-      height: 55,
-      decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.green),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
-        child: TextField(
-          controller: otpController,
-          keyboardType: TextInputType.number,
-          textAlign: TextAlign.center,
-          maxLength: 6,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 15),
-            hintText: 'OTP प्रविष्ट करा',
-            counterText: "",
-          ),
-        ),
-      ),
-    );
-  }
-
-//   void _verifyOTP() {
-//     String otp = otpController.text;
-//     if (otp.length == 6) {
-//       // OTP पडताळणी लॉजिक
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text("OTP यशस्वीरित्या पडताळला")),
-//       );
-//     } else {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text("कृपया वैध 6-अंकी OTP प्रविष्ट करा")),
-//       );
-//     }
-//   }
 }
