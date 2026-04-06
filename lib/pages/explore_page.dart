@@ -7,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shetimitra/l10n/app_localizations.dart';
 import 'package:shetimitra/pages/aihelthscanner.dart';
+import 'package:shetimitra/pages/drone_service_screen.dart';
+import 'package:shetimitra/pages/language_settings_page.dart';
 import 'package:shetimitra/pages/land_measurement.dart';
+import 'package:shetimitra/pages/machinery_service_screen.dart';
+import 'package:shetimitra/pages/soil_testing_screen.dart';
 import 'package:shetimitra/pages/post_creation_screen.dart';
 import 'package:shetimitra/services/market_price_service.dart';
 import 'package:shetimitra/services/weather_service.dart';
@@ -809,35 +813,89 @@ class _ExplorePageState extends State<ExplorePage>
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildToolItem(
-                          context,
-                          image: 'assets/shovel.jpg',
-                          label: l10n.t('landMeasurementTool'),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const LandMeasurementPage(),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final itemWidth = (constraints.maxWidth - 12) / 2;
+                      return Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          SizedBox(
+                            width: itemWidth,
+                            child: _buildToolItem(
+                              context,
+                              image: 'assets/shovel.jpg',
+                              label: l10n.t('landMeasurementTool'),
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const LandMeasurementPage(),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: _buildToolItem(
-                          context,
-                          image: 'assets/helthscan.jpg',
-                          label: l10n.t('aiHealthTool'),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const PlantDiseaseDetector(),
+                          SizedBox(
+                            width: itemWidth,
+                            child: _buildToolItem(
+                              context,
+                              image: 'assets/helthscan.jpg',
+                              label: l10n.t('aiHealthTool'),
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PlantDiseaseDetector(),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
+                          SizedBox(
+                            width: itemWidth,
+                            child: _buildToolItem(
+                              context,
+                              image: 'assets/images/droan.jpg',
+                              label: l10n.t('droneService'),
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const DroneServiceScreen(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: itemWidth,
+                            child: _buildToolItem(
+                              context,
+                              image: 'assets/tractor.jpg',
+                              label: l10n.t('machineryService'),
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MachineryServiceScreen(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: itemWidth,
+                            child: _buildToolItem(
+                              context,
+                              image: 'assets/services/soil.jpeg',
+                              label: l10n.t('soilTesting'),
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SoilTestingScreen(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -1159,6 +1217,32 @@ class _ExplorePageState extends State<ExplorePage>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageSettingsCard(AppLocalizations l10n) {
+    final localeController = AppLocaleScope.of(context);
+    final currentLang = localeController.locale?.languageCode ?? 'en';
+
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: Icon(Icons.language, color: Colors.green[800]),
+        title: Text(
+          l10n.t('language'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(l10n.languageName(currentLang)),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const LanguageSettingsPage(),
+            ),
+          );
+        },
       ),
     );
   }
