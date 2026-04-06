@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shetimitra/l10n/app_localizations.dart';
 import 'package:shetimitra/pages/onboarding_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MainApp());
 }
 
@@ -45,7 +48,8 @@ class _MainAppState extends State<MainApp> {
               useMaterial3: true,
               textTheme: GoogleFonts.muktaTextTheme(),
             ),
-            onGenerateTitle: (context) => AppLocalizations.of(context).t('appName'),
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context).t('appName'),
             home: const OnboardingPage(),
           );
         },

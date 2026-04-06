@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 import 'package:shetimitra/data/products.dart';
 import 'package:shetimitra/l10n/app_localizations.dart';
 import 'package:shetimitra/models/product.dart';
+import 'package:shetimitra/providers/cart_provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required this.product});
@@ -15,6 +17,7 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   bool showMore = false;
+  int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +113,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       padding: const EdgeInsets.only(left: 6),
                       child: Text(
                         showMore ? l10n.t('readLess') : l10n.t('readMore'),
-                        style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                   ),
@@ -148,13 +152,101 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ),
           ),
           const SizedBox(height: 20),
-          FilledButton.icon(
-            onPressed: () {},
-            icon: const Icon(IconlyLight.bag2),
-            label: Text(l10n.t('addToCart')),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).colorScheme.outline),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.t('quantityLabel'),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: quantity > 1
+                          ? () {
+                              setState(() => quantity--);
+                            }
+                          : null,
+                      icon: const Icon(IconlyLight.arrowLeft2),
+                      iconSize: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '$quantity',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: quantity < 100
+                          ? () {
+                              setState(() => quantity++);
+                            }
+                          : null,
+                      icon: const Icon(IconlyLight.arrowRight2),
+                      iconSize: 20,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => _addToCart(context, l10n),
+              icon: const Icon(IconlyLight.bag2),
+              label: Text(l10n.t('addToCart')),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  void _addToCart(BuildContext context, AppLocalizations l10n) {
+    try {
+      context.read<CartProvider>().addToCart(widget.product, quantity);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.t('addedToCart')),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          duration: const Duration(seconds: 2),
+          action: SnackBarAction(
+            label: l10n.t('view'),
+            textColor: Theme.of(context).colorScheme.primary,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      );
+
+      setState(() => quantity = 1);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${l10n.t('error')}: $e'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 }

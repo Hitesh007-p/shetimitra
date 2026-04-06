@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const ExplorePage(),
     const ServicesPage(),
-    const Calculation(),
     const ProfilePage(),
   ];
 
@@ -33,7 +32,49 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       key: _scaffoldKey,
-      drawer: const Drawer(),
+      drawer: Drawer(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      l10n.t('appName'),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.t('greeting'),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: const Icon(IconlyLight.calendar),
+                title: Text(l10n.t('tabPlanning')),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Calculation(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
         centerTitle: false,
         leading: IconButton.filledTonal(
@@ -125,11 +166,6 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(IconlyLight.call),
             label: l10n.t('tabServices'),
             activeIcon: const Icon(IconlyBold.call),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(IconlyLight.calendar),
-            label: l10n.t('tabPlanning'),
-            activeIcon: const Icon(IconlyBold.chat),
           ),
           BottomNavigationBarItem(
             icon: const Icon(IconlyLight.profile),

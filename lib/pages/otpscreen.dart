@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shetimitra/l10n/app_localizations.dart';
-import 'package:shetimitra/pages/home_page.dart';
+import 'package:shetimitra/pages/profile_setup_page.dart';
 import 'package:shetimitra/widgets/language_menu_button.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -36,13 +36,15 @@ class _OTPScreenState extends State<OTPScreen> {
               ),
               Text(
                 l10n.t('loginHeadline'),
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
                 l10n.t('loginSubheadline'),
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 50),
@@ -79,7 +81,8 @@ class _OTPScreenState extends State<OTPScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(builder: (context) => const HomePage()),
+                      CupertinoPageRoute(
+                          builder: (context) => const ProfileSetupPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
